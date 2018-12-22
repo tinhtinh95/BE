@@ -19,7 +19,11 @@ if (command === 'add') {
     console.log('This note is already added.');
   }
 } else if (command === 'list') {
-  notes.getAll();
+  var noteArray = notes.getAll();
+  console.log(`There are ${noteArray.length} notes: `);
+  noteArray.forEach(element => {
+    console.log(element);
+  });
 } else if (command === 'read') {
   var note = notes.getNote(argv.title);
   var message = note ? `Info the note: title="${note.title}" and body="${note.body}"` 
