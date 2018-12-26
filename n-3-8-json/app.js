@@ -29,6 +29,7 @@ const argv = yargs
     title: titleOptions
   })
   .help()
+  .alias('help', 'h')
   .argv;
 var command = argv._[0];
 console.log('Command: ', command);
