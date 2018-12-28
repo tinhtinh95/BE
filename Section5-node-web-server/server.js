@@ -1,14 +1,29 @@
 const express = require('express');
 const hbs = require('hbs');
+const fs = require('fs');
 
 var app = express();
 
 hbs.registerPartials(__dirname+ '/views/partials');
 app.set('view engine', 'hbs');
-app.use(express.static(__dirname + '/public'));
+
 
 app.use((req, res, next)=>{
-    
+    console.log(`Run before next: ${req.method}, ${req.url}`);
+    var time = new Date().toString();
+    var log = `time: ${time}:  ${req.method}, ${req.url}`;
+    console.log(log);
+    fs.appendFile('server.log', log+'\n', (err) =>{
+        if(err) {
+            console.log('Unable to append to server.log');
+        }
+    });
+
+    next();
+})
+
+app.use((req, res, next)=>{
+    res.render('maintenance.hbs');
 })
 
 hbs.registerHelper('getCurrentYear', () => {
@@ -18,7 +33,7 @@ hbs.registerHelper('getCurrentYear', () => {
 hbs.registerHelper('upperCase', (text) => {
     return text.toUpperCase();
 })
-
+ 
 app.get('/', (req, res) => {
     // res.send('Express');
     // res.send('<h1>Express</h1>');
@@ -35,6 +50,8 @@ app.get('/', (req, res) => {
         welcomeMessage: 'Welcome to Express'
     })
 });
+
+app.use(express.static(__dirname + '/public'));
 
 app.get('/about', (req, res)=> {
     res.render('about.hbs', {

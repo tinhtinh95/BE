@@ -16,3 +16,9 @@ module.exports.asyncAdd = (a, b, callBack) => {
         callBack(a+b);
     }, 1000)
 }
+
+module.exports.asyncSquare = (a, callBack) => {
+    setTimeout(()=>{
+        callBack(a*a);
+    }, 1000);
+}

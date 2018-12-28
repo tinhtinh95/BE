@@ -1,0 +1,9 @@
+ GET, /about
+ GET, /
+time: GET, /
+time: Thu Dec 27 2018 09:26:05 GMT+0700 (Indochina Time):  GET, /
+time: Thu Dec 27 2018 09:26:15 GMT+0700 (Indochina Time):  GET, /about
+time: Thu Dec 27 2018 09:32:02 GMT+0700 (Indochina Time):  GET, /about
+time: Thu Dec 27 2018 09:32:05 GMT+0700 (Indochina Time):  GET, /
+time: Thu Dec 27 2018 09:38:14 GMT+0700 (Indochina Time):  GET, /help.html
+time: Thu Dec 27 2018 09:38:16 GMT+0700 (Indochina Time):  GET, /

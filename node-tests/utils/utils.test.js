@@ -28,8 +28,15 @@ it('should set firstName and lastName', () => {
 })
 
 it('should async add two numbers', (done) => {
-    utils.asyncAdd(4, '3', (sum) =>{
+    utils.asyncAdd(4, 3, (sum) =>{
         expect(sum).toBe(7).toBeA('number');
+        done(); // use it because it's asynchronous function
+    })
+})
+
+it('should a async square number', (done) => {
+    utils.asyncSquare('2', (square) => {
+        expect(square).toBe(9).toBeA('number');
         done();
     })
 })
