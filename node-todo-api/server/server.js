@@ -1,55 +1,42 @@
-const mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/TodoApp');
+const {mongoose} =require('./db/mongoose');
+const {Todo} = require('./models/todo');
+const {User} = require('./models/user');
 
-var Todo = mongoose.model('Todo', {
-    text: {
-        type: String,
-        required: true,
-        minLength: 1,
-        trim: true 
-    },
-    completed: {
-        type: Boolean,
-        default: false
-    },
-    completedAt: {
-        type: Number,
-        default: null
-    }
-});
+var app = express();
 
-var newTodo = new Todo({
-    // text: 'A new todo',
-    // completed: true,
-    // completedAt: 111
-});
+// app.get('/', (req, res) => {
+//     res.send({});
+// })
 
-// newTodo.save().then((doc) => {
-//     console.log('Saved todo,', JSON.stringify(doc, undefined, 2));
-// }, (e) => {
-//     console.log('Unable to save todo', e)
-// });
+app.use(bodyParser.json())
 
-var User = mongoose.model('User', {
-    username: {
-        type: String,
-        required: true,
-        minLength: 3,
-        trim: true
-    },
-    password: {
-        type: String,
-        required: true,
-    },
-});
-
-var newUser = new User({
-    username: 'Tina   ',
-    password: '126456'
-}).save().then((doc) => {
-    console.log('Saved user success: ', JSON.stringify(doc, undefined, 2))
-}, (err) => {
-    console.log('Unable to save user: ', err)
+app.post('/todos', (req, res)=> {
+    console.log(req.body);
+    var newTodo = new Todo({
+        text: req.body.text,
+    });
+    newTodo.save().then((doc) => {
+        console.log('Saved todo,', JSON.stringify(doc, undefined, 2));
+        res.send(doc); // neu k co thi post man cu chay mai
+    }, (e) => {
+        res.status(400).send(e);
+        console.log('Unable to save todo', e)
+    })
 })
+
+app.listen(3000, () => {
+    console.log('Started on port 3000');
+})
+
+
+// var newUser = new User({
+//     username: 'Tina   ',
+//     password: '126456'
+// }).save().then((doc) => {
+//     console.log('Saved user success: ', JSON.stringify(doc, undefined, 2))
+// }, (err) => {
+//     console.log('Unable to save user: ', err)
+// })
