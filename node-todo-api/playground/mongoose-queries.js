@@ -2,7 +2,7 @@ const {mongoose} = require('./../server/db/mongoose');
 const {Todo} = require('./../server/models/todo');
 const {ObjectID} = require('mongodb');
 
-var id = '5c2e32b0894ac721bf0fa928n';
+var id = '5c2e32b0894ac721bf0fa928';
 
 if(!ObjectID.isValid(id)){
     console.log('ID is invalid');
