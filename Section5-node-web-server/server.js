@@ -7,6 +7,7 @@ var app = express();
 hbs.registerPartials(__dirname+ '/views/partials');
 app.set('view engine', 'hbs');
 
+const port = process.env.PORT || 3000;
 
 app.use((req, res, next)=>{
     console.log(`Run before next: ${req.method}, ${req.url}`);
@@ -66,6 +67,6 @@ app.get('/bad', (req, res)=>{
     })
 })
 
-app.listen(3000, () => {
+app.listen(port, () => {
     console.log('Server is ready');
 });
