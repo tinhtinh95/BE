@@ -32,7 +32,7 @@ app.get('/todos', (req, res) => {
     }, (e) => {
         res.status(400).send(e);
     })
-})
+});
 
 app.get('/todos/:id', (req, res)=> {
     // res.send(req.params);
@@ -48,12 +48,27 @@ app.get('/todos/:id', (req, res)=> {
     }).catch(e => {
         res.status(400).send();
     })
+});
+
+app.delete('/todos/:id', (req, res)=> {
+    var id = req.params.id;
+    if(!ObjectId.isValid(id)){
+        return res.status(404).send('ID is invalid');
+    }
+    Todo.findByIdAndRemove(id).then(todo => {
+        if(todo) {
+            return res.status(200).send({todo});
+        }else {
+            return res.status(404).send('Can not found todo');
+        }
+    }).catch(e => {
+        return res.status(400).send();
+    })
 })
 
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
 })
-
 
 // var newUser = new User({
 //     username: 'Tina   ',
