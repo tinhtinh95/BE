@@ -102,12 +102,18 @@ app.listen(port, () => {
     console.log(`Started on port ${port}`);
 })
 
-// var newUser = new User({
-//     username: 'Tina   ',
-//     password: '126456'
-// }).save().then((doc) => {
-//     console.log('Saved user success: ', JSON.stringify(doc, undefined, 2))
-// }, (err) => {
-//     console.log('Unable to save user: ', err)
-// })
+app.post('/users', (req, res) => {
+    const user = new User({
+        email: 'tina@enclave.vn',
+        password: 'tina123456'
+    })
+    user.save().then(user => {
+        console.log('Saved user success: ', JSON.stringify(user, undefined, 2));
+        res.status(200).send(user);
+    }).catch(e => {
+        res.status(404).send(e);
+        console.log('Unable to save user: ', user);
+    })
+})
+
 module.exports = {app};
