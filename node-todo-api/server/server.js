@@ -103,16 +103,22 @@ app.listen(port, () => {
 })
 
 app.post('/users', (req, res) => {
-    const user = new User({
-        email: 'tina@enclave.vn',
-        password: 'tina123456'
-    })
+    // const user = new User({
+    //     email: 'tina@enclave.vn',
+    //     password: 'tina123456'
+    // })
+    const body = _.pick(req.body, ['email', 'password']); // pick from post man
+    const user = new User(body);
+
     user.save().then(user => {
-        console.log('Saved user success: ', JSON.stringify(user, undefined, 2));
-        res.status(200).send(user);
+        console.log(user);
+        return user.generateAuthToken();
+    }).then(token => {
+        console.log(token);
+        res.header('x-auth', token).send(user);
     }).catch(e => {
-        res.status(404).send(e);
-        console.log('Unable to save user: ', user);
+        res.status(400).send(e);
+        console.log('Unable to save user: ', e);
     })
 })
 
