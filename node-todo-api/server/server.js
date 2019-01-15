@@ -8,6 +8,7 @@ const {mongoose} =require('./db/mongoose');
 const {Todo} = require('./models/todo');
 const {User} = require('./models/user');
 const _ = require('lodash');
+const {authenticate} = require('./middleware/middleware');
 
 var app = express();
 
@@ -98,10 +99,6 @@ app.patch('/todos/:id', (req, res) => {
         })
 })
 
-app.listen(port, () => {
-    console.log(`Started on port ${port}`);
-})
-
 app.post('/users', (req, res) => {
     // const user = new User({
     //     email: 'tina@enclave.vn',
@@ -120,6 +117,14 @@ app.post('/users', (req, res) => {
         res.status(400).send(e);
         console.log('Unable to save user: ', e);
     })
+});
+
+app.get('/users/me', authenticate,  (req, res)=>{
+    res.send(req.user);
+})
+
+app.listen(port, () => {
+    console.log(`Started on port ${port}`);
 })
 
 module.exports = {app};
