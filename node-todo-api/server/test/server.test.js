@@ -4,6 +4,7 @@ const expect = require('expect');
 const {ObjectID} = require('mongodb');
 const {app} = require('./../server');
 const {Todo} = require('../models/todo');
+const {User} = require('../models/user');
 const {todos, populateTodos, users, populateUsers} = require('./seed/seed');
 
 beforeEach(populateTodos);
@@ -185,4 +186,53 @@ describe('GET /users/me', () => {
             })
             .end(done);
     })
+});
+
+describe('POST /users', () => {
+    it('should create a user', (done) => {
+        const email = "nttinh995@gmail.com";
+        const password = "tina123";
+        request(app)
+            .post('/users')
+            .send({email, password})
+            .expect(200)
+            .expect(res => {
+                expect(res.headers['x-auth']).toBeTruthy();
+                expect(res.body._id).toBeTruthy();
+                expect(res.body.email).toBe(email);
+            })
+            .end(err => {
+                if(err) {
+                    return done(err);
+                }else {
+                    User.findOne({email}).then(user => {
+                        expect(user).toBeTruthy();
+                        expect(user.password).not.toBe(password);
+                        done();
+                    }).catch(e => {
+                        done(e);
+                    })
+                }
+            });
+
+    });
+
+    it('should return validation errors if request invalid', (done) => {
+        const email = "tatata";
+        const password = "123"; // nho hon 6 ki tu
+        request(app)
+            .post('/users')
+            .send({email, password})
+            .expect(400)
+            .end(done);
+    });
+
+    it('should not create user if email in use', (done) => {
+        const password = "titatatddd";
+        request(app)
+            .post('/users')
+            .send({email: [users[0].email, password]})
+            .expect(400)
+            .end(done);
+    });
 })
