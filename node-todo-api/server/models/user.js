@@ -14,7 +14,7 @@ const UserSchema = new mongoose.Schema({
             true,
             "Email must be a unique"
         ], 
-        validata: {
+        validate: {
             validator: validator.isEmail,
             message: '{VALUE} is not a valid email'
         }
@@ -83,7 +83,7 @@ UserSchema.statics.findByCredentials = function(email, password){
         return new Promise((resolve, reject) => {
             brcypt.compare(password, user.password, (err, result) => {
                 if(result){
-                    resolve();
+                    resolve(user);
                 }else{
                     reject();
                 }
