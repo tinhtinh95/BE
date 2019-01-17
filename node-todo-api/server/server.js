@@ -135,6 +135,14 @@ app.post('/users/login', (req, res) => {
     }).catch(e => {
         res.status(400).send(e);
     })
+});
+
+app.delete('/users/me/token', authenticate, (req, res) => {
+    req.user.removeToken(req.token).then(() => {
+        res.status(200).send();
+    }, () => {
+        res.status(400).send();
+    })
 })
 
 app.listen(port, () => {
@@ -142,3 +150,8 @@ app.listen(port, () => {
 })
 
 module.exports = {app};
+
+// users post -> tao ra 1 user moi bao gom token (co dinh)
+// users/me -> dua vao token de lay lai user
+// users/login -> login voi email, password, compare password, neu dung login thanh cong thi tao ra token 
+// users/me/token -> xoa token khi da login
