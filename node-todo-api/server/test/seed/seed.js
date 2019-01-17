@@ -31,12 +31,14 @@ const todos = [
     {
         _id: new ObjectID(),
         text: 'First test todo',
+        _creator: userID1
     },
     {
         _id: new ObjectID(),
         text: 'Second test todo',
         completed: true,
-        completedAt: 333
+        completedAt: 333,
+        _creator: userID2
     }
 ];
 const populateTodos = done => {
