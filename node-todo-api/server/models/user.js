@@ -68,7 +68,7 @@ UserSchema.statics.findByToken = function(token){
     }
 
     return user.findOne({
-        _id: decoded._id,
+        '_id': decoded._id,
         'tokens.token': token,
         'tokens.access': 'auth'
     })

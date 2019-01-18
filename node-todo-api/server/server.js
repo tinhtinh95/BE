@@ -1,4 +1,4 @@
-require('./config/config.js');
+require('./config/config');
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -25,7 +25,7 @@ app.post('/todos', authenticate, (req, res)=> {
     });
     newTodo.save().then((doc) => {
         console.log('Saved todo,', JSON.stringify(doc, undefined, 2));
-        res.send(doc); // neu k co thi post man cu chay mai
+        res.send(doc);
     }, (e) => {
         res.status(400).send(e);
         console.log('Unable to save todo', e)
