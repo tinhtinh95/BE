@@ -28,13 +28,21 @@ export class GstEditComponent implements OnInit {
       });
     }
 
-
   ngOnInit() {
+    console.log('ddd');
     this.route.params.subscribe(params => {
         this.bs.editBusiness(params['id']).subscribe(res => {
           this.business = res;
       });
     });
   }
-
+  updateBusiness(person_name, business_name, business_gst_number) {
+    this.route.params.subscribe(params => {
+      this.bs.updateBusiness(person_name, business_name, business_gst_number, params['id'])
+        .subscribe(res => {
+          console.log('Done with: ', res);
+          this.router.navigate(['business']);
+        });
+ });
+}
 }

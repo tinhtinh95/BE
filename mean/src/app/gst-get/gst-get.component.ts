@@ -14,16 +14,20 @@ export class GstGetComponent implements OnInit {
   constructor(private bs: BusinessService) { }
 
   ngOnInit() {
+    this.reloadData();
+  }
+  reloadData() {
     this.bs
-      .getBusinesses()
-      .subscribe((data: Business[]) => {
-        this.businesses = data;
-    });
+    .getBusinesses()
+    .subscribe((data: Business[]) => {
+      this.businesses = data;
+  });
   }
 
-  updateBusiness(person_name, business_name, business_gst_number) {
-    this.route.params.subscribe(params => {
-       this.bs.updateBusiness(person_name, business_name, business_gst_number, params['id']);
-       this.router.navigate(['business']);
- });
+  deleteBusiness(id) {
+    this.bs.deleteBusiness(id).subscribe(res => {
+      console.log('Deleted');
+      this.reloadData();
+    });
+  }
 }

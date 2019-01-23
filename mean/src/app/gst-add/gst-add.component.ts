@@ -18,7 +18,7 @@ export class GstAddComponent implements OnInit {
     this.angForm = this.fb.group({
       person_name: ['', Validators.required ],
       business_name: ['', Validators.required ],
-      business_gst_number: ['', Validators.required ]
+      business_gst_number: ['', Validators.required]
     });
   }
 

@@ -38,24 +38,40 @@ businessRoutes.route('/edit/:id').get(function (req, res) {
   });
 });
 
-//  Defined update route
+//  Defined update 
 businessRoutes.route('/update/:id').post(function (req, res) {
-    Business.findById(req.params.id, function(err, next, business) {
-    if (!business)
-      return next(new Error('Could not load Document'));
-    else {
-        business.person_name = req.body.person_name;
-        business.business_name = req.body.business_name;
-        business.business_gst_number = req.body.business_gst_number;
+//   Business.findById(req.params.id, function(err, business) {
+//   if (!business)
+//     return next(new Error('Could not load Document'));
+//   else {
+//       business.person_name = req.body.person_name;
+//       business.business_name = req.body.business_name;
+//       business.business_gst_number = req.body.business_gst_number;
 
-        business.save().then(business => {
-          res.json('Update complete');
+//       business.save().then(business => {
+//         res.json('Update complete');
+//     })
+//     .catch(err => {
+//           res.status(400).send("unable to update the database");
+//     });
+//   }
+// });
+  const business = new Business(req.body);
+  console.log('business', business);
+    Business.findByIdAndUpdate(req.params.id, {
+      $set: business
+    }, {
+      new: true
+    })
+      .then(business => {
+        console.log(business);
+        if(!business){
+          return res.status(404).send('Could not load Document');
+        }
+          return res.send({business});
+      }).catch(er =>{
+        res.status(400).send("unable to update the database");
       })
-      .catch(err => {
-            res.status(400).send("unable to update the database");
-      });
-    }
-  });
 });
 
 // Defined delete | remove | destroy route
