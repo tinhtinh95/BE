@@ -11,8 +11,21 @@ const port= process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, '../public')
 app.use(express.static(publicDirectoryPath));
 
-io.on('connection', () => {
+let count =0 ;
+
+// server (emit) -> client (receive) -countUpdated
+// client (emit) -> server (receive) - increment
+
+io.on('connection', (socket) => {
     console.log('New websocket connection');
+
+    socket.emit('countUpdated', count); // emit event for client
+
+    socket.on('increment', () => {
+        count++;
+        // socket.emit('countUpdated', count);
+        io.emit('countUpdated', count); // realtime if open two browser
+    })
 })
 
 server.listen(port, () => {
