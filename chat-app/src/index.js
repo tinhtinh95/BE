@@ -29,8 +29,14 @@ io.on('connection', (socket) => {
 
     socket.emit('msg', 'Welcome!');
 
+    socket.broadcast.emit('msg', 'A new user has joined'); // gui cho tat ca user tru cai hien tai
+
     socket.on('sendMessage', (message) => {
         io.emit('msg', message);    
+    });
+
+    socket.on('disconnect', () => {
+        io.emit('msg', 'The user has left');
     })
 })
 
