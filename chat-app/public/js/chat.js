@@ -13,11 +13,22 @@ socket.on('msg', (msg) => {
     console.log('msg: ', msg);
 });
 
-document.querySelector('#form').addEventListener('submit', (e) => {
+
+// Elements
+const $form = document.querySelector('#form');
+const $inputMessage = document.querySelector('#message');
+const $buttonSubmit = document.querySelector('button');
+const $location = document.querySelector('#location');
+
+$form.addEventListener('submit', (e) => {
     e.preventDefault();
-    let message = document.querySelector('#message').value;
+    $buttonSubmit.setAttribute('disabled', 'disabled');
+    let message = $inputMessage.value;
     // console.log(message);
     socket.emit("sendMessage", message, (err) => {
+        $inputMessage.value = '';
+        $inputMessage.focus();
+        $buttonSubmit.removeAttribute('disabled');
         if(err){
             return console.log(err);
         }
@@ -25,16 +36,19 @@ document.querySelector('#form').addEventListener('submit', (e) => {
     });
 });
 
-document.querySelector('#location').addEventListener('click', () => {
+$location.addEventListener('click', () => {
     if(!navigator.geolocation){
         return alert('Geolocation is not supported on your browser');
     }
+
+    $location.setAttribute('disabled', 'disabled');
+
     navigator.geolocation.getCurrentPosition((position) => {
-        // console.log(position);
         socket.emit('sendLocation', {
             longitude: position.coords.longitude,
             latitude: position.coords.latitude,
         }, () => {
+            $location.removeAttribute('disabled');
             console.log('The location is shared.')
         });
     })
