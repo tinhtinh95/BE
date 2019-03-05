@@ -9,16 +9,21 @@ const socket = io();
 //     socket.emit('increment');
 // })
 
-socket.on('msg', (msg) => {
-    console.log('msg: ', msg);
-});
-
-
 // Elements
 const $form = document.querySelector('#form');
 const $inputMessage = document.querySelector('#message');
 const $buttonSubmit = document.querySelector('button');
 const $location = document.querySelector('#location');
+const $messages = document.querySelector('#messages');
+
+// Templates
+const messageTemplates = document.querySelector('#message_template').innerHTML;
+
+socket.on('msg', (msg) => {
+    console.log('msg: ', msg);
+    const html = Mustache.render(messageTemplates, {msg});
+    $messages.insertAdjacentHTML('beforeend', html);
+});
 
 $form.addEventListener('submit', (e) => {
     e.preventDefault();
