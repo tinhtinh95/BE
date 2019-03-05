@@ -15,15 +15,22 @@ const $inputMessage = document.querySelector('#message');
 const $buttonSubmit = document.querySelector('button');
 const $location = document.querySelector('#location');
 const $messages = document.querySelector('#messages');
+const $location_show = document.querySelector('#location_show');
 
 // Templates
 const messageTemplates = document.querySelector('#message_template').innerHTML;
+const locationTemplates = document.querySelector('#location_template').innerHTML;
 
 socket.on('msg', (msg) => {
     console.log('msg: ', msg);
     const html = Mustache.render(messageTemplates, {msg});
     $messages.insertAdjacentHTML('beforeend', html);
 });
+
+socket.on('location', (location) => {
+    const html = Mustache.render(locationTemplates, {location})
+    $location_show.insertAdjacentHTML('beforeend', html);
+})
 
 $form.addEventListener('submit', (e) => {
     e.preventDefault();

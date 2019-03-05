@@ -18,10 +18,16 @@
     <div id="messages">
 
     </div>
+    <div id="location_show"> </div>
     <button id="location">Share your location</button>
     <script id="message_template" type="text/html">
         <div>
             <p>{{msg}} </p>
+        </div>
+    </script>
+    <script id="location_template" type="text/html">
+        <div>
+            <p><a href="{{location}}">{{location}} </a></p>
         </div>
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
