@@ -22,8 +22,8 @@ const messageTemplates = document.querySelector('#message_template').innerHTML;
 const locationTemplates = document.querySelector('#location_template').innerHTML;
 
 socket.on('msg', (msg) => {
-    console.log('msg: ', msg);
-    const html = Mustache.render(messageTemplates, {msg});
+    // console.log('msg: ', msg);
+    const html = Mustache.render(messageTemplates, {msg: msg.text, createAt: moment(msg.createAt).format('h: mm a - DD/MM/YYYY')});
     $messages.insertAdjacentHTML('beforeend', html);
 });
 

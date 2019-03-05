@@ -7,6 +7,7 @@ const server = http.createServer(app);
 const socketio = require('socket.io');
 const io = socketio(server);
 const Filter = require('bad-words');
+const generateMessage = require('./utils/messages');
 
 const port= process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, '../public')
@@ -28,21 +29,21 @@ io.on('connection', (socket) => {
     //     io.emit('countUpdated', count); // realtime if open two browser
     // })
 
-    socket.emit('msg', 'Welcome!');
+    socket.emit('msg', generateMessage('Welcome!'));
 
-    socket.broadcast.emit('msg', 'A new user has joined'); // gui cho tat ca user tru cai hien tai
+    socket.broadcast.emit('msg', generateMessage('A new user has joined')); // gui cho tat ca user tru cai hien tai
 
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter();
         if(filter.isProfane(message)) {
             return callback('Profanity is not allowed.')
         }
-        io.emit('msg', message);    
+        io.emit('msg', generateMessage(message));    
         callback();
     });
 
     socket.on('disconnect', () => {
-        io.emit('msg', 'The user has left');
+        io.emit('msg', generateMessage('The user has left'));
     });
 
     socket.on('sendLocation', (coords, callback) => {
