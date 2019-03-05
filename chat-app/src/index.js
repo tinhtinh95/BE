@@ -8,6 +8,7 @@ const socketio = require('socket.io');
 const io = socketio(server);
 const Filter = require('bad-words');
 const generateMessage = require('./utils/messages');
+const generatLocation = require('./utils/location');
 
 const port= process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, '../public')
@@ -47,7 +48,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('sendLocation', (coords, callback) => {
-        io.emit('location', `https://www.google.com/maps?q=${coords.latitude},${coords.longitude}`);
+        io.emit('location', generatLocation(`https://www.google.com/maps?q=${coords.latitude},${coords.longitude}`));
         callback();
     })
 })
