@@ -16,8 +16,13 @@ socket.on('msg', (msg) => {
 document.querySelector('#form').addEventListener('submit', (e) => {
     e.preventDefault();
     let message = document.querySelector('#message').value;
-    console.log(message);
-    socket.emit("sendMessage", message);
+    // console.log(message);
+    socket.emit("sendMessage", message, (err) => {
+        if(err){
+            return console.log(err);
+        }
+        console.log('The message was delivered: ');
+    });
 });
 
 document.querySelector('#location').addEventListener('click', () => {
@@ -25,10 +30,12 @@ document.querySelector('#location').addEventListener('click', () => {
         return alert('Geolocation is not supported on your browser');
     }
     navigator.geolocation.getCurrentPosition((position) => {
-        console.log(position);
+        // console.log(position);
         socket.emit('sendLocation', {
             longitude: position.coords.longitude,
             latitude: position.coords.latitude,
+        }, () => {
+            console.log('The location is shared.')
         });
     })
 })

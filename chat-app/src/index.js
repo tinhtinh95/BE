@@ -6,6 +6,7 @@ const http = require('http');
 const server = http.createServer(app);
 const socketio = require('socket.io');
 const io = socketio(server);
+const Filter = require('bad-words');
 
 const port= process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, '../public')
@@ -31,18 +32,22 @@ io.on('connection', (socket) => {
 
     socket.broadcast.emit('msg', 'A new user has joined'); // gui cho tat ca user tru cai hien tai
 
-    socket.on('sendMessage', (message) => {
+    socket.on('sendMessage', (message, callback) => {
+        const filter = new Filter();
+        if(filter.isProfane(message)) {
+            return callback('Profanity is not allowed.')
+        }
         io.emit('msg', message);    
+        callback();
     });
 
     socket.on('disconnect', () => {
         io.emit('msg', 'The user has left');
     });
 
-    socket.on('sendLocation', (coords) => {
-        // io.emit('msg', position);
-        // io.emit('msg', `Location with long: ${coords.longitude} and lat: ${coords.latitude}`)
-        io.emit('msg', `https://www.google.com/maps?q=${coords.latitude},${coords.longitude}`)
+    socket.on('sendLocation', (coords, callback) => {
+        io.emit('msg', `https://www.google.com/maps?q=${coords.latitude},${coords.longitude}`);
+        callback();
     })
 })
 
