@@ -10,7 +10,7 @@ const Filter = require('bad-words');
 const generateMessage = require('./utils/messages');
 const generatLocation = require('./utils/location');
 
-const port= process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, '../public')
 app.use(express.static(publicDirectoryPath));
 
@@ -30,16 +30,18 @@ io.on('connection', (socket) => {
     //     io.emit('countUpdated', count); // realtime if open two browser
     // })
 
-    socket.emit('msg', generateMessage('Welcome!'));
+    socket.on('join', ({ username, room }) => {
+        socket.join(room)
+        socket.emit('msg', generateMessage('Welcome!'));
 
-    socket.broadcast.emit('msg', generateMessage('A new user has joined')); // gui cho tat ca user tru cai hien tai
-
+        socket.broadcast.to(room).emit('msg', generateMessage(`${username} has joined`)); // gui cho tat ca user tru cai hien tai
+    })
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter();
-        if(filter.isProfane(message)) {
+        if (filter.isProfane(message)) {
             return callback('Profanity is not allowed.')
         }
-        io.emit('msg', generateMessage(message));    
+        io.emit('msg', generateMessage(message));
         callback();
     });
 
