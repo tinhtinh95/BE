@@ -10,10 +10,10 @@ const socket = io();
 // })
 
 // Elements
-const $form = document.querySelector('#form');
+const $form = document.querySelector('#message_form');
 const $inputMessage = document.querySelector('#message');
 const $buttonSubmit = document.querySelector('button');
-const $location = document.querySelector('#location');
+const $location = document.querySelector('#send-location');
 const $messages = document.querySelector('#messages');
 const $location_show = document.querySelector('#location_show');
 
@@ -29,7 +29,7 @@ socket.on('msg', (msg) => {
 
 socket.on('location', (location) => {
     const html = Mustache.render(locationTemplates, {url: location.url, createAt: moment(location.createAt).format('h: mm a - DD/MM/YYYY')})
-    $location_show.insertAdjacentHTML('beforeend', html);
+    $messages.insertAdjacentHTML('beforeend', html);
 })
 
 $form.addEventListener('submit', (e) => {
