@@ -51,8 +51,6 @@ $form.addEventListener('submit', (e) => {
     });
 });
 
-socket.emit('join', {username, room})
-
 $location.addEventListener('click', () => {
     if(!navigator.geolocation){
         return alert('Geolocation is not supported on your browser');
@@ -69,4 +67,11 @@ $location.addEventListener('click', () => {
             console.log('The location is shared.')
         });
     })
+});
+
+socket.emit('join', {username, room}, (err) => {
+    if(err) {
+        alert(err);
+        location.href = '/'
+    }
 })

@@ -35,3 +35,40 @@ const removeUser = (id) => {
         return users.splice(index,1)[0];
     }
 }
+
+const getUser = (id) => {
+    const user = users.find(user => user.id === id);
+    if(user) {
+        return { user }
+    }else {
+        return null;
+    }
+}
+
+const getUsersInRoom = (roomName) => {
+    const usersInRoom = users.filter(user => user.room === roomName);
+    if(usersInRoom.length === 0){
+        return [];
+    }else{
+        return usersInRoom;
+    }
+}
+
+// addUser({
+//     id: 24,
+//     username: 'Tina',
+//     room: "Room A"
+// });
+// addUser({
+//     id: 24,
+//     username: 'Tinh',
+//     room: "Room A"
+// })
+
+// console.log(getUsersInRoom('room b'));
+module.exports = {
+    addUser,
+    removeUser,
+    getUser,
+    getUsersInRoom
+}

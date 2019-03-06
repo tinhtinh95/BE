@@ -9,6 +9,7 @@ const io = socketio(server);
 const Filter = require('bad-words');
 const generateMessage = require('./utils/messages');
 const generatLocation = require('./utils/location');
+const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users');
 
 const port = process.env.PORT || 3000;
 const publicDirectoryPath = path.join(__dirname, '../public')
@@ -22,19 +23,18 @@ app.use(express.static(publicDirectoryPath));
 io.on('connection', (socket) => {
     console.log('New websocket connection');
 
-    // socket.emit('countUpdated', count); // emit event for client
+    socket.on('join', (options, callback) => {
+        const { error, user } = addUser({id: socket.id, ...options})
 
-    // socket.on('increment', () => {
-    //     count++;
-    //     // socket.emit('countUpdated', count);
-    //     io.emit('countUpdated', count); // realtime if open two browser
-    // })
+        if(error) {
+            return callback(error);
+        }
 
-    socket.on('join', ({ username, room }) => {
-        socket.join(room)
+        socket.join(user.room)
         socket.emit('msg', generateMessage('Welcome!'));
 
-        socket.broadcast.to(room).emit('msg', generateMessage(`${username} has joined`)); // gui cho tat ca user tru cai hien tai
+        socket.broadcast.to(user.room).emit('msg', generateMessage(`${user.username} has joined`)); // gui cho tat ca user tru cai hien tai
+        callback();
     })
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter();
@@ -46,7 +46,10 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        io.emit('msg', generateMessage('The user has left'));
+        const user = removeUser(socket.id);
+        if(user){
+            io.to(user.room).emit('msg', generateMessage(`${user.username} has left!`));
+        }
     });
 
     socket.on('sendLocation', (coords, callback) => {
