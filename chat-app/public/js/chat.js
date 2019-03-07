@@ -26,12 +26,12 @@ const {username, room} = Qs.parse(location.search, { ignoreQueryPrefix: true })
 
 socket.on('msg', (msg) => {
     // console.log('msg: ', msg);
-    const html = Mustache.render(messageTemplates, {msg: msg.text, createAt: moment(msg.createAt).format('h: mm a - DD/MM/YYYY')});
+    const html = Mustache.render(messageTemplates, {username: msg.username, msg: msg.text, createAt: moment(msg.createAt).format('h: mm a - DD/MM/YYYY')});
     $messages.insertAdjacentHTML('beforeend', html);
 });
 
 socket.on('location', (location) => {
-    const html = Mustache.render(locationTemplates, {url: location.url, createAt: moment(location.createAt).format('h: mm a - DD/MM/YYYY')})
+    const html = Mustache.render(locationTemplates, {username: location.username, url: location.url, createAt: moment(location.createAt).format('h: mm a - DD/MM/YYYY')})
     $messages.insertAdjacentHTML('beforeend', html);
 })
 
@@ -55,10 +55,9 @@ $location.addEventListener('click', () => {
     if(!navigator.geolocation){
         return alert('Geolocation is not supported on your browser');
     }
-
     $location.setAttribute('disabled', 'disabled');
-
     navigator.geolocation.getCurrentPosition((position) => {
+        console.log('send');
         socket.emit('sendLocation', {
             longitude: position.coords.longitude,
             latitude: position.coords.latitude,
