@@ -16,10 +16,12 @@ const $buttonSubmit = document.querySelector('button');
 const $location = document.querySelector('#send-location');
 const $messages = document.querySelector('#messages');
 const $location_show = document.querySelector('#location_show');
+const $sidebar = document.querySelector('#sidebar');
 
 // Templates
 const messageTemplates = document.querySelector('#message_template').innerHTML;
 const locationTemplates = document.querySelector('#location_template').innerHTML;
+const sidebarTemplate = document.querySelector('#sidebar_template').innerHTML;
 
 // Options
 const {username, room} = Qs.parse(location.search, { ignoreQueryPrefix: true })
@@ -33,6 +35,13 @@ socket.on('msg', (msg) => {
 socket.on('location', (location) => {
     const html = Mustache.render(locationTemplates, {username: location.username, url: location.url, createAt: moment(location.createAt).format('h: mm a - DD/MM/YYYY')})
     $messages.insertAdjacentHTML('beforeend', html);
+});
+
+socket.on('roomData', ({room, users}) => {
+    const html = Mustache.render(sidebarTemplate, {room, users});
+    $sidebar.innerHTML = html; // override lai
+    // $sidebar.insertAdjacentHTML('beforeend', html); // load lai cai moi
+    console.log(room, users);
 })
 
 $form.addEventListener('submit', (e) => {
